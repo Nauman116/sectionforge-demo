@@ -4,26 +4,17 @@ import { useRef, useState, type FormEvent } from "react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 /**
- * WaitlistForm — client-side email capture for the validation slice.
- *
- * TODO (before launch): wire this to a real provider. Two options:
- *   1. Formspree — POST the email to your form endpoint:
- *        await fetch("https://formspree.io/f/YOUR_FORM_ID", {
- *          method: "POST",
- *          headers: { "Content-Type": "application/json" },
- *          body: JSON.stringify({ email }),
- *        });
- *   2. Gumroad — send buyers to your $0+ lite product page instead of
- *      collecting email here (Gumroad handles the list for you).
- * Until then, submissions only flip the local success state.
+ * WaitlistForm — email capture for the validation slice.
+ * Submits to Formspree; signups land in the owner's inbox.
  */
 export function WaitlistForm() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
   const errorRef = useRef<HTMLParagraphElement>(null);
 
-  function onSubmit(e: FormEvent) {
+  async function onSubmit(e: FormEvent) {
     e.preventDefault();
     const value = email.trim();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
@@ -33,8 +24,21 @@ export function WaitlistForm() {
       return;
     }
     setError(null);
-    // TODO: replace with a real provider call (see comment above).
-    setDone(true);
+    setSending(true);
+    try {
+      const res = await fetch("https://formspree.io/f/mqpeznzz", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ email: value }),
+      });
+      if (!res.ok) throw new Error(`Formspree responded ${res.status}`);
+      setDone(true);
+    } catch {
+      setError("Something went wrong sending your email — please try again.");
+      requestAnimationFrame(() => errorRef.current?.focus());
+    } finally {
+      setSending(false);
+    }
   }
 
   if (done) {
@@ -72,10 +76,11 @@ export function WaitlistForm() {
         />
         <button
           type="submit"
-          className="inline-flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-coral px-8 text-[15px] font-semibold text-ink transition-[background-color,box-shadow,transform] duration-200 hover:bg-coral-deep active:scale-[0.98]"
+          disabled={sending}
+          className="inline-flex h-14 cursor-pointer items-center justify-center gap-2 rounded-full bg-coral px-8 text-[15px] font-semibold text-ink transition-[background-color,box-shadow,transform] duration-200 hover:bg-coral-deep active:scale-[0.98] disabled:cursor-wait disabled:opacity-70"
         >
-          Notify me
-          <ArrowRight className="size-4" aria-hidden />
+          {sending ? "Sending…" : "Notify me"}
+          {!sending && <ArrowRight className="size-4" aria-hidden />}
         </button>
       </div>
       {error && (
