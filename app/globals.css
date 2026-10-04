@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+/* SectionForge "Editorial Premium" tokens — Tailwind CSS v4 CSS-first config.
+   Rebrand the whole kit by editing these values. */
+
+@theme {
+  --color-ink: #0a0f0e;
+  --color-petrol: #0c3530;
+  --color-petrol-deep: #082723;
+  --color-sand: #f4ede3;
+  --color-sand-deep: #e9ddc9;
+  --color-coral: #e07856;
+  --color-coral-deep: #c75f3e;
+  --color-sage: #9db8a4;
+  --color-sage-deep: #7d9a84;
+
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* next-themes class strategy: `.dark` on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+html {
+  scroll-behavior: smooth;
+  touch-action: manipulation;
+}
+
+body {
+  @apply bg-sand text-ink dark:bg-ink dark:text-sand font-sans antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fraunces display headlines: tight leading, optical sizing */
+.font-display {
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+}
+
+/* Fine film grain overlay (SVG turbulence, no image assets) */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.32'/%3E%3C/svg%3E");
+}
+
+/* Marquee for logo strips — pauses for reduced motion */
+@keyframes sf-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: sf-marquee 32s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--color-coral);
+  color: var(--color-ink);
+}
