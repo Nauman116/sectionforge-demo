@@ -6,6 +6,10 @@ import { HeroCinematic } from "@/components/sections/heroes/HeroCinematic";
 import { PricingToggle } from "@/components/sections/pricing/PricingToggle";
 import { PricingSingle } from "@/components/sections/pricing/PricingSingle";
 import { PricingCompare } from "@/components/sections/pricing/PricingCompare";
+import { FeaturesBento } from "@/components/sections/features/FeaturesBento";
+import { Testimonials } from "@/components/sections/social-proof/Testimonials";
+import { CtaBanner } from "@/components/sections/cta/CtaBanner";
+import { FaqAccordion } from "@/components/sections/faq/FaqAccordion";
 import { Reveal } from "@/lib/reveal";
 
 /** Sticky demo chrome — not part of the shipped kit. */
@@ -72,11 +76,27 @@ export default function Page() {
           <HeroSplit />
           <HeroCinematic />
         </div>
+        <div id="features" className="scroll-mt-16">
+          <BandLabel>Features — 07</BandLabel>
+          <FeaturesBento />
+        </div>
+        <div id="testimonials" className="scroll-mt-16">
+          <BandLabel>Social proof — 08</BandLabel>
+          <Testimonials />
+        </div>
         <div id="pricing" className="scroll-mt-16">
           <BandLabel>Pricing — 04 / 05 / 06</BandLabel>
           <PricingToggle />
           <PricingSingle />
           <PricingCompare />
+        </div>
+        <div id="cta" className="scroll-mt-16">
+          <BandLabel>Call to action — 09</BandLabel>
+          <CtaBanner />
+        </div>
+        <div id="faq" className="scroll-mt-16">
+          <BandLabel>FAQ — 10</BandLabel>
+          <FaqAccordion />
         </div>
 
         {/* waitlist */}
@@ -98,7 +118,7 @@ export default function Page() {
             </Reveal>
             <Reveal delay={0.16}>
               <p className="mx-auto mt-5 max-w-xl text-pretty text-lg text-sand/65">
-                These 6 sections are the validation slice. Join the waitlist and
+                These 10 sections are the validation slice. Join the waitlist and
                 get launch pricing ($39 instead of $49) plus the free 10-section
                 lite pack on day one.
               </p>
@@ -116,7 +136,7 @@ export default function Page() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row">
           <p className="font-display text-lg font-semibold">SectionForge</p>
           <p className="text-sm text-ink/60 dark:text-sand/60">
-            Validation preview — 6 of 68 sections. Built to be judged.
+            Validation preview — 10 of 68 sections. Built to be judged.
           </p>
         </div>
       </footer>
